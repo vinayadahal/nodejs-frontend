@@ -29,13 +29,15 @@ pipeline {
 
         stage('Docker Push') {
             steps {
-                def branch_name=env.BRANCH_NAME
+                script{
+                    def branch_name=env.BRANCH_NAME
                     if (branch_name == "main") {
                         echo 'starting build ...'
                         sh 'docker build -t bidahal/nodejs-front .'
                     } else {
                         echo 'skipping build ...'
                     }
+                }
             }
         }
 
