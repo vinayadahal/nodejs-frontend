@@ -35,7 +35,7 @@ pipeline {
                         echo 'starting build ...'
                         sh 'docker build -t bidahal/nodejs-front .'
                     } else {
-                        echo 'skipping build ...'
+                        echo "skipping build ${env.BRANCH_NAME} ..."
                     }
                 }
             }
