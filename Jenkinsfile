@@ -28,6 +28,14 @@ pipeline {
         }
 
         stage('Docker Push') {
+                sh """
+                        if [ \${env.BRANCH_NAME}=="main" ]
+                        then
+                          echo "starting build for main ..."
+                        else
+                          echo "skipped build for main..."
+                        fi
+                    """
             when {
                 branch 'main'
             }
