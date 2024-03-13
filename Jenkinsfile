@@ -21,7 +21,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 // Your deployment steps go here
-                sh 'echo \'testing\'' // Example Kubernetes deployment
+               echo 'testing deploy' // Example Kubernetes deployment
             }
         }
     }
