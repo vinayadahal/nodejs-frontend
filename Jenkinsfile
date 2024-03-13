@@ -32,7 +32,7 @@ pipeline {
                 branch 'main'
             }
             steps {
-               echo 'testing deploy'
+               echo 'testing deploy.'
             }
         }
     }
