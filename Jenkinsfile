@@ -6,11 +6,18 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'git@github.com:vinayadahal/nodejs-frontend.git']]])
-            }
+
+        stage('Preparation') {
+         checkout scm
         }
+//     stage('Who am i?') {
+//         echo "This job was triggered by a Git push to branch: ${env.BRANCH_NAME}"
+//     }
+//         stage('Checkout') {
+//             steps {
+//                 checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'git@github.com:vinayadahal/nodejs-frontend.git']]])
+//             }
+//         }
 
         stage('Docker Build') {
             steps {
