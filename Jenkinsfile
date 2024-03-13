@@ -2,26 +2,37 @@ pipeline {
     agent any
 
     triggers {
-        githubPush(branch: 'main') // Trigger pipeline on push to main branch
+        githubPush()
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'git@github.com:vinayadahal/nodejs-frontend.git'
+                checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'git@github.com:vinayadahal/nodejs-frontend.git']]])
             }
         }
 
-        stage('Build') {
+        stage('Docker Build') {
             steps {
-                sh 'docker build -t bidahal/nodejs-front' // Example Maven build step
+                sh 'docker build -t bidahal/nodejs-front .'
+            }
+        }
+
+        stage('Docker Push') {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh 'docker build -t bidahal/nodejs-front .'
             }
         }
 
         stage('Deploy') {
+            when {
+                branch 'main'
+            }
             steps {
-                // Your deployment steps go here
-               echo 'testing deploy' // Example Kubernetes deployment
+               echo 'testing deploy'
             }
         }
     }
