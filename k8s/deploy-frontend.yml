@@ -16,7 +16,7 @@ spec:
         app: adex-webapp-frontend-label
     spec:
       containers:
-        - name: tomcat9-pods
+        - name: adex-webapp-frontend
           image: bidahal/nodejs-front
           ports:
             - containerPort: 3000
