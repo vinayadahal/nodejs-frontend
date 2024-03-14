@@ -1,8 +1,12 @@
 pipeline {
     agent any
 
-    triggers {
-        githubPush()
+//     triggers {
+//         githubPush()
+//     }
+
+    environment {
+        DOCKERHUB_CREDENTIALS= credentials('docker-hub-credentials')
     }
 
     stages {
@@ -24,6 +28,13 @@ pipeline {
         stage('Docker Build') {
             steps {
                 sh 'docker build -t bidahal/nodejs-front .'
+            }
+        }
+
+        stage('Login to Docker Hub') {
+            steps{
+	            sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+	            echo 'Login Completed'
             }
         }
 
