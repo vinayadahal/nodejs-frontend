@@ -8,7 +8,20 @@ pipeline {
     stages {
         stage('Docker Build') {
             steps {
-                sh 'docker build -t bidahal/nodejs-front .'
+                def branch_name=env.BRANCH_NAME
+                    if (branch_name == "main") {
+                        echo "Building docker image with 'latest' tag"
+                        sh 'docker build -t bidahal/nodejs-front .'
+                    } else if (branch_name == "stg") {
+                        echo "Building docker image with 'stg' tag"
+                        sh 'docker build -t bidahal/nodejs-front:stg .'
+                    } else if (branch_name == "dev") {
+                        echo "Building docker image with 'dev' tag"
+                        sh 'docker build -t bidahal/nodejs-front:dev .'
+                    } else {
+                        echo "Building docker image without a tag for feature branch: $branch_name"
+                        sh 'docker build -t bidahal/nodejs-front .'
+                    }
             }
         }
         stage('Docker Login and Push') {
