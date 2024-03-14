@@ -48,7 +48,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Deploy k8s') {
             steps {
                 script {
                     def branch_name=env.BRANCH_NAME
@@ -64,6 +64,25 @@ pipeline {
                         echo "Applying changes to the main k8s cluster for dev branch"
                         sh 'kubectl apply -f k8s/deploy-frontend-dev.yml'
                         sh 'kubectl apply -f k8s/hpa-dev.yml'
+                    } else {
+                        echo "Skipping deploy for feature branch: $branch_name..."
+                    }
+                }
+            }
+        }
+        stage('Deploy latest image') {
+            steps {
+                script {
+                    def branch_name=env.BRANCH_NAME
+                    if (branch_name == "main") {
+                        echo "Replace image in the cluster for main branch"
+                        sh 'kubectl set image deployment/adex-webapp-frontend-deployment adex-webapp-frontend=bidahal/nodejs-front:latest -n adex-webapp'
+                    } else if (branch_name == "stg") {
+                        echo "Replace image in the cluster for stg branch"
+                        sh 'kubectl set image deployment/adex-webapp-frontend-deployment-stg adex-webapp-frontend-stg=bidahal/nodejs-front:stg -n adex-webapp-stg'
+                    } else if (branch_name == "dev") {
+                        echo "Replace image in the cluster for dev branch"
+                        sh 'kubectl set image deployment/adex-webapp-frontend-deployment-dev adex-webapp-frontend-dev=bidahal/nodejs-front:dev -n adex-webapp-dev'
                     } else {
                         echo "Skipping deploy for feature branch: $branch_name..."
                     }
