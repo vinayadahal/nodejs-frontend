@@ -43,7 +43,7 @@ pipeline {
                         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                         sh 'docker push bidahal/nodejs-front:dev'
                     } else {
-                        echo "Skipping docker login and push for feature branch: $branch_name..."
+                        echo "Skipping docker login and push for feature branch: $branch_name...."
                     }
                 }
             }
