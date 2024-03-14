@@ -19,6 +19,14 @@ pipeline {
                         echo "Logging into docker hub and pushing the changes to 'main' tag"
                         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                         sh 'docker push bidahal/nodejs-front'
+                    } else if (branch_name == "stg") {
+                        echo "Logging into docker hub and pushing the changes to 'stg' tag"
+                        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                        sh 'docker push bidahal/nodejs-front:stg'
+                    } else if (branch_name == "dev") {
+                        echo "Logging into docker hub and pushing the changes to 'dev' tag"
+                        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                        sh 'docker push bidahal/nodejs-front:dev'
                     } else {
                         echo "Skipping docker login and push for feature branch: $branch_name..."
                     }
@@ -32,6 +40,13 @@ pipeline {
                     if (branch_name == "main") {
                         echo "Applying changes to the main k8s cluster"
                         sh 'kubectl apply -f k8s/deploy-frontend.yml'
+                    } else if (branch_name == "stg") {
+                        echo "Applying changes to the main k8s cluster for stg branch"
+                        sh 'kubectl apply -f k8s/deploy-frontend-stg.yml'
+                    } else if (branch_name == "dev") {
+                        echo "Applying changes to the main k8s cluster for dev branch"
+                        sh 'kubectl apply -f k8s/deploy-frontend-dev.yml'
+                    }
                     } else {
                         echo "Skipping deploy for feature branch: $branch_name..."
                     }

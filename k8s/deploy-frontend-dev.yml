@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adex-webapp-frontend-deployment
+  namespace: adex-webapp
+  labels:
+    app: adex-webapp-frontend-label
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adex-webapp-frontend-label
+  template:
+    metadata:
+      labels:
+        app: adex-webapp-frontend-label
+    spec:
+      containers:
+        - name: adex-webapp-frontend
+          image: bidahal/nodejs-front:dev
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 200m # this is the minimum cpu that this pod will use
+              memory: 250Mi
+            limits: # this is the limit on how much cpu can this pod use
+              cpu: 1000m # this 'm' refers to the microns for cpu and 1000 microns = 1 cpu core and 'mi' refers to the megabit for the ram.
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: adex-webapp-frontend-service
+  namespace: adex-webapp
+spec:
+  type: NodePort
+  selector:
+    app: adex-webapp-frontend-label
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3000
+      nodePort: 30100
