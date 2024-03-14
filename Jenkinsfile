@@ -46,7 +46,6 @@ pipeline {
                     } else if (branch_name == "dev") {
                         echo "Applying changes to the main k8s cluster for dev branch"
                         sh 'kubectl apply -f k8s/deploy-frontend-dev.yml'
-                    }
                     } else {
                         echo "Skipping deploy for feature branch: $branch_name..."
                     }
